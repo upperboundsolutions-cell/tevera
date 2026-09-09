@@ -1,0 +1,7 @@
+{
+    email {$TLS_EMAIL}
+}
+{$DOMAIN} {
+    encode zstd gzip
+    reverse_proxy app:80
+}

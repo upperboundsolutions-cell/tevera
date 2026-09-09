@@ -1,0 +1,14 @@
+[Unit]
+Description=FleetAtlas queue worker (enable when background jobs are introduced)
+After=network.target
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/fleet-atlas
+ExecStart=/usr/bin/php artisan queue:work --sleep=3 --tries=3 --timeout=90 --max-time=3600
+Restart=always
+RestartSec=5
+KillSignal=SIGTERM
+TimeoutStopSec=120
+[Install]
+WantedBy=multi-user.target

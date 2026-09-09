@@ -1,0 +1,57 @@
+/* Shared controls: explicit sizing, readable labels and consistent states. */
+:root { --control-bg: #fff; --control-border: #bbcdd7; --control-hover: #7e9caa; --control-focus: #007f99; }
+html[data-theme="dark"] { --control-bg: #0c1824; --control-border: #385264; --control-hover: #638295; --control-focus: #72ddea; }
+:is(.fleet-form, .fleet-filter, .form-stack, .assistant-compose, .vehicle-sidebar) :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="hidden"]), select, textarea) {
+    display: block; width: 100%; min-width: 0; min-height: 46px; padding: 12px 14px;
+    border: 1px solid var(--control-border); border-radius: 10px; background: var(--control-bg);
+    color: var(--ink); font: inherit; font-size: 14px; line-height: 1.5;
+    box-shadow: 0 1px 2px #00000006; transition: border-color .16s, box-shadow .16s;
+}
+:is(.fleet-form, .fleet-filter, .form-stack, .assistant-compose, .vehicle-sidebar) :is(input, select, textarea):hover:not(:disabled) { border-color: var(--control-hover); }
+:is(.fleet-form, .fleet-filter, .form-stack, .assistant-compose, .vehicle-sidebar) :is(input, select, textarea):focus-visible {
+    outline: 2px solid var(--control-focus); outline-offset: 2px; border-color: var(--control-focus); box-shadow: none;
+}
+:is(.fleet-form, .fleet-filter, .form-stack, .assistant-compose, .vehicle-sidebar) :is(input, textarea)::placeholder { color: var(--muted); opacity: .85; }
+:is(.fleet-form, .fleet-filter, .form-stack, .assistant-compose) label { color: var(--ink); font-size: 13px; font-weight: 550; line-height: 1.5; gap: 9px; }
+.fleet-form label small, .fleet-form .muted, .assistant-compose .muted { font-size: 12px; font-weight: 400; line-height: 1.65; color: var(--muted); }
+.fleet-form input:read-only:not([type="checkbox"]):not([type="radio"]):not([type="range"]) { background: var(--surface-soft); color: var(--muted); }
+:is(.fleet-form, .fleet-filter, .form-stack, .assistant-compose) textarea { min-height: 120px; resize: vertical; }
+:is(.fleet-form, .fleet-filter, .vehicle-sidebar) select:not([multiple]) { padding-right: 34px; appearance: auto; cursor: pointer; }
+.fleet-form select[multiple] { min-height: 160px; padding: 7px; }.fleet-form select[multiple] option { padding: 9px 10px; border-radius: 5px; }
+:is(.fleet-form, .fleet-filter, .form-stack, .assistant-compose) :is(input, select, textarea):disabled { opacity: .6; cursor: not-allowed; }
+:is(.fleet-form, .form-stack, .assistant-compose) [aria-invalid="true"] { border-color: #d45c67; }
+.fleet-grid { gap: 24px; margin: 24px 0; }.fleet-filter { gap: 14px; padding: 22px; }.fleet-filter label { flex: 1 1 180px; }
+.fleet-save { gap: 14px; flex-wrap: wrap; padding-top: 20px; border-top: 1px solid var(--line); }
+.form-stack { gap: 10px; }.form-stack>label { margin-top: 9px; }.form-row { gap: 16px; font-size: 12px; }
+:is(.primary, a.primary, .secondary, a.secondary), html[data-theme="dark"] :is(.primary, a.primary, .secondary, a.secondary) {
+    display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+    min-height: 44px; padding: 11px 18px; border-radius: 10px;
+    font: inherit; font-size: 13px; font-weight: 650; line-height: 1.4; text-align: center;
+    text-decoration: none; vertical-align: middle; cursor: pointer; transition: background-color .16s, border-color .16s, box-shadow .16s;
+}
+.primary, a.primary, html[data-theme="dark"] .primary, html[data-theme="dark"] a.primary {
+    background: #087e98; border: 1px solid #087e98; color: #fff; box-shadow: 0 2px 5px #063f5418;
+}
+.primary:hover, a.primary:hover, html[data-theme="dark"] .primary:hover, html[data-theme="dark"] a.primary:hover { background: #086b83; border-color: #086b83; color: #fff; box-shadow: 0 3px 8px #063f5425; }
+html[data-theme="dark"] .primary, html[data-theme="dark"] a.primary { background: #73dbe7; border-color: #73dbe7; color: #092b35; }
+html[data-theme="dark"] .primary:hover, html[data-theme="dark"] a.primary:hover { background: #a1eaf2; border-color: #a1eaf2; color: #092b35; }
+.secondary, a.secondary, html[data-theme="dark"] .secondary, html[data-theme="dark"] a.secondary { background: var(--surface); color: var(--ink); border: 1px solid var(--control-border); box-shadow: 0 1px 2px #00000005; }
+.secondary:hover, a.secondary:hover, html[data-theme="dark"] .secondary:hover, html[data-theme="dark"] a.secondary:hover { background: var(--surface-soft); color: var(--ink); border-color: var(--control-hover); box-shadow: none; }
+:is(.primary, .secondary):disabled, :is(.primary, .secondary)[aria-disabled="true"] { opacity: .5; cursor: not-allowed; box-shadow: none; }
+.form-stack>.primary { width: 100%; min-height: 48px; margin-top: 8px; }
+.icon-button { min-width: 40px; width: 40px; height: 40px; border-color: var(--control-border); color: var(--ink); }
+.tracking-actions { flex-wrap: wrap; gap: 9px; }.heading-actions { gap: 12px; }
+.fleet-table :is(.primary, .secondary) { min-height: 36px; padding: 8px 12px; font-size: 12px; }
+.fleet-table td>form { display: inline-block; margin: 3px 5px 3px 0; }
+:is(.checkbox, .fleet-form, .form-stack, .assistant-compose) input:is([type="checkbox"], [type="radio"]) {
+    appearance: auto; display: inline-block; width: 18px; height: 18px; min-height: 18px;
+    flex: 0 0 18px; padding: 0; margin: 0; accent-color: var(--control-focus); cursor: pointer; box-shadow: none;
+}
+.checkbox, .fleet-form label.checkbox { display: flex; flex-direction: row; align-items: center; gap: 10px; color: var(--ink); font-size: 12px; cursor: pointer; }
+.global-search { min-height: 42px; border-color: var(--control-border); overflow: visible; }.global-search input { min-height: 40px; padding: 10px 12px; font-size: 13px; border-radius: 9px; }.global-search button { min-width: 38px; min-height: 40px; }
+@media (max-width: 760px) {
+    :is(.fleet-form, .fleet-filter, .form-stack, .assistant-compose, .vehicle-sidebar) :is(input, select, textarea) { font-size: 16px; }
+    .fleet-filter label { flex-basis: auto; }.fleet-filter input { min-width: 0; }.fleet-grid { gap: 20px; }
+    .heading-actions { flex-wrap: wrap; }.fleet-save>.primary { width: 100%; }.form-row { flex-wrap: wrap; }
+}
+@media (prefers-reduced-motion: reduce) { :is(button, input, select, textarea, .primary, .secondary) { transition: none !important; } }

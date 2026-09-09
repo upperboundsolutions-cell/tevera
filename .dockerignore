@@ -1,0 +1,17 @@
+.git
+.tools
+.codex
+.agents
+.gradle
+target
+deploy/.env
+deploy/backups
+platform/.env*
+platform/vendor
+platform/node_modules
+platform/storage
+platform/bootstrap/cache/*.php
+platform/database/*.sqlite*
+platform/public/build
+platform/public/hot
+**/*.log

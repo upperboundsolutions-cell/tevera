@@ -1,0 +1,37 @@
+/* Motion stays decorative; content and controls remain usable without JavaScript. */
+@keyframes tevera-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes tevera-spin { to { transform: rotate(360deg); } }
+@keyframes tevera-progress { from { transform: translateX(-110%); } to { transform: translateX(340%); } }
+@keyframes tevera-signal { 0%, 100% { box-shadow: 0 0 0 0 #458df42b; } 60% { box-shadow: 0 0 0 13px #458df400; } }
+.content > .page-heading, .auth-card, .story-content { animation: tevera-enter .45s ease-out both; }
+.premium-stats .stat-card { animation: tevera-enter .45s ease-out both; }
+.premium-stats .stat-card:nth-child(2) { animation-delay: .055s; }
+.premium-stats .stat-card:nth-child(3) { animation-delay: .11s; }
+.premium-stats .stat-card:nth-child(4) { animation-delay: .165s; }
+.tracking-shell, .premium-overview, .fleet-panel { animation: tevera-enter .5s ease-out both; }
+.profile-dropdown, .sidebar.is-open { animation: tevera-enter .2s ease-out; }
+.journey-node { animation: tevera-signal 2.8s ease-out 3; }
+.node-finish { animation-delay: 1s; }
+.primary, .secondary, .icon-button, .nav-item, .stat-card, .quick-links > a, .vehicle-row { transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease, translate .2s ease; }
+@media (hover: hover) {
+    .primary:hover, .secondary:hover, .icon-button:hover { translate: 0 -2px; }
+    .stat-card:hover, .quick-links > a:hover { translate: 0 -3px; box-shadow: 0 9px 24px #102c5510; }
+    .nav-item:hover { translate: 3px 0; }
+}
+.primary:active, .secondary:active, .icon-button:active { translate: 0 1px; }
+.tevera-spinner { display: inline-block; flex: 0 0 auto; width: 25px; height: 25px; border: 3px solid #1767e821; border-top-color: var(--blue, #1767e8); border-right-color: #2baf78; border-radius: 50%; animation: tevera-spin .85s linear infinite; }
+.navigation-progress { position: fixed; inset: 0 0 auto; height: 3px; overflow: hidden; z-index: 10000; background: #1767e81a; pointer-events: none; }
+.navigation-progress::after { content: ''; display: block; height: 100%; width: 30%; background: linear-gradient(90deg, #1767e8, #28b97b); animation: tevera-progress 1.2s ease-in-out infinite; }
+.action-loader { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; align-items: center; gap: 13px; padding: 15px 21px; max-width: calc(100vw - 32px); width: max-content; border: 1px solid var(--line); border-radius: 15px; background: var(--surface); color: var(--ink); box-shadow: 0 12px 45px #061a3825; font-size: 12px; pointer-events: none; }
+.map-stage { position: relative; }
+.map-loading { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); z-index: 800; display: flex; align-items: center; gap: 10px; padding: 12px 17px; border: 1px solid var(--line); border-radius: 13px; background: var(--surface); color: var(--ink); box-shadow: 0 6px 28px #0d234222; font-size: 11px; width: max-content; max-width: calc(100% - 90px); pointer-events: none; }
+.map-loading .tevera-spinner { width: 21px; height: 21px; }
+[data-map-refresh]:disabled .ui-icon { animation: tevera-spin 1s linear infinite; }
+[data-map-vehicles][aria-busy="true"] { opacity: .55; transition: opacity .2s; }
+.is-submitting::after { content: ''; width: 14px; height: 14px; flex: 0 0 auto; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; display: inline-block; margin-left: 7px; animation: tevera-spin .85s linear infinite; }
+.navigation-progress[hidden], .action-loader[hidden], .map-loading[hidden] { display: none; }
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    .navigation-progress::after { width: 100%; }
+    .primary:hover, .secondary:hover, .icon-button:hover, .stat-card:hover, .quick-links > a:hover, .nav-item:hover { translate: none; }
+}

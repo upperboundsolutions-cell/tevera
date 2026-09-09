@@ -1,0 +1,7 @@
+@extends('layouts.app')
+@section('title','Getting started')
+@section('content')
+<div class="page-heading"><div><h1>Get your fleet ready</h1><p class="muted">Complete these steps in your workspace before starting a real vehicle pilot.</p></div></div>
+<section class="panel"><h2>Your setup</h2>@foreach($steps as [$title,$complete,$route,$description])<div class="panel-heading"><div><h3>{{ $title }}</h3><p class="muted">{{ $description }}</p><span class="badge">{{ $complete ? 'Configured' : 'Needs setup' }}</span></div><a class="secondary" href="{{ route($route) }}">Open</a></div>@endforeach</section>
+<section class="panel fleet-section"><h2>Verify before inviting your team</h2><ol><li>Use the <a href="{{ route('tracker.setup') }}">tracker setup guide</a> to configure the device address, protocol port and SIM/APN.</li><li>Check a fresh position on the <a href="{{ route('tracking') }}">vehicle map</a>, then drive a short test route.</li><li>Review that route in <a href="{{ route('history.index') }}">playback</a> and verify timestamps and geofence events.</li><li>Assign your staff only the vehicles they should see.</li><li>Check <a href="{{ route('billing.index') }}">subscription settings</a>. Live checkout needs confirmed plans and Paynow configuration.</li></ol><p class="muted">These manual checks are not marked complete automatically. Simulation does not verify a physical GPS tracker.</p></section>
+@endsection

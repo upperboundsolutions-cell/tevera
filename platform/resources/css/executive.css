@@ -1,0 +1,33 @@
+/* Executive workspace: generous spacing, readable type and a restrained dark navigation. */
+:root { --radius: 18px; --muted: #64748b; --page: #f1f4f9; --shadow: 0 6px 24px #182d4c07; }
+.history-slider { display: block; width: 100%; margin: 16px 0; accent-color: #1767e8; }
+#geofence-picker { height: 320px; margin: 18px 0; border-radius: 12px; }
+.sidebar { background: #101c30; border-right: 1px solid #26364c; padding-top: 22px; }
+.sidebar .nav-label { color: #8496b1; font-size: 9px; letter-spacing: 1.7px; margin-top: 25px; }
+.sidebar .nav-item, html[data-theme="dark"] .sidebar .nav-item { color: #b8c6db; font-size: 12px; min-height: 42px; border-radius: 10px; }
+.sidebar .nav-item:hover { background: #1a2c46; color: white; }
+.sidebar .nav-item.selected, html[data-theme="dark"] .sidebar .nav-item.selected { color: #fff; background: #234d85; box-shadow: inset 3px 0 #66b3ff; }
+.sidebar-bottom { border-color: #2b3b51; background: #17263c; border-radius: 12px; padding: 14px 10px; }
+.sidebar-bottom strong { color: #e3eaf5; }.sidebar-bottom small, .sidebar-signature { color: #99adc8; }
+.sidebar-signature span { color: #8fa2be; }.sidebar-brand .brand-tagline { color: #afc0d6; }
+.ai-nav { gap: 12px; }.ai-nav>span:first-child { color: #a8caff; font-size: 22px; }.ai-nav small { margin-left: auto; background: #35517e; color: #dbeaff; padding: 3px 6px; border-radius: 5px; font-size: 9px; }
+.topbar { background: var(--surface); min-height: 76px; border-bottom-color: var(--line); }.breadcrumb { font-size: 12px; }
+.content { padding-top: 30px; }.panel, .stat-card, .tracking-shell { border-radius: 18px; box-shadow: var(--shadow); }
+.page-heading .muted, .fleet-form label { font-size: 13px; }.fleet-table th { font-size: 10px; letter-spacing: .7px; }.fleet-table td { padding-top: 17px; padding-bottom: 17px; font-size: 12px; }
+.fleet-table tbody tr { transition: background-color .18s; }.fleet-table tbody tr:hover { background: var(--surface-soft); }
+.primary, a.primary, .secondary, a.secondary { border-radius: 10px; min-height: 42px; }
+.premium-stats .stat-card { padding: 20px; }.metric-top { font-size: 12px; }.metric-bottom { font-size: 10px; }.premium-stats .stat-card strong { font-size: 37px; letter-spacing: -1.5px; }
+.executive-banner { position: relative; isolation: isolate; overflow: hidden; padding: 32px 38px; margin-bottom: 28px; border-radius: 22px; background: radial-gradient(ellipse at 93% 20%, #236276 0, transparent 48%), linear-gradient(115deg, #101f37, #173658); color: #fff; display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.executive-banner::after { content: ''; z-index: -1; position: absolute; right: -90px; top: -160px; width: 490px; height: 490px; border: 1px solid #b5e0ef20; border-radius: 50%; box-shadow: 0 0 0 55px #b5e0ef07, 0 0 0 110px #b5e0ef06; pointer-events: none; }
+.hero-kicker { font-size: 10px; font-weight: 650; letter-spacing: 2.3px; color: #9cd5ed; }
+.executive-banner h1, .executive-banner h2 { color: white; font-size: clamp(27px, 3vw, 40px); line-height: 1.13; letter-spacing: -1.5px; margin: 13px 0; }
+.executive-banner p { color: #b9cee2; font-size: 13px; line-height: 1.7; margin: 0 0 22px; }.executive-banner .heading-actions { justify-content: flex-start; }
+.hero-link { color: #e2edff; font-size: 12px; padding: 10px 0; }.hero-link:hover { color: #fff; text-decoration: underline; }
+.hero-emblem { width: 190px; height: 170px; flex-shrink: 0; border: 1px solid #a4d7ee25; border-radius: 30px; background: #ffffff08; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 11px; transform: rotate(-5deg); }.hero-emblem .ui-icon { width: 44px; height: 44px; color: #8de1c0; }.hero-emblem span { font-size: 22px; font-weight: 700; letter-spacing: 4px; }.hero-emblem small { font-size: 8px; color: #b0cddd; letter-spacing: 3px; }
+.assistant-layout { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(250px, 1fr); gap: 24px; align-items: start; }.assistant-panel { padding: 28px; }.assistant-welcome { text-align: center; padding: 35px 18px; }.assistant-welcome h2 { font-size: 22px; }.assistant-spark { display: inline-grid; place-items: center; width: 64px; height: 64px; background: var(--blue-soft); color: var(--blue); font-size: 35px; border-radius: 20px; margin-bottom: 20px; }.ai-orbit { font-size: 96px; color: #a5e4d7; margin-right: 32px; }
+.assistant-compose textarea { width: 100%; padding: 15px; resize: vertical; min-height: 120px; border: 1px solid var(--line); border-radius: 13px; background: var(--surface-soft); color: var(--ink); font: inherit; }.assistant-compose .checkbox { display: flex; align-items: center; gap: 9px; font-size: 12px; }.assistant-compose .checkbox input { width: 16px; min-height: 16px; }.assistant-compose .muted { font-size: 11px; }
+.assistant-question { background: var(--surface-soft); padding: 16px 20px; border-radius: 13px; margin: 20px 0; overflow-wrap: anywhere; }.assistant-answer { padding: 22px; border: 1px solid var(--line); border-radius: 15px; margin-bottom: 24px; }.assistant-answer .hero-kicker { color: var(--blue); }.assistant-answer p { white-space: pre-wrap; font-size: 14px; line-height: 1.85; overflow-wrap: anywhere; }
+.assistant-panel details { margin-top: 24px; font-size: 12px; line-height: 1.8; }.assistant-panel code { overflow-wrap: anywhere; }
+.auth-card { padding: 25px 0; }.auth-card h2 { font-size: 32px; }.auth-card .intro { font-size: 14px; }.form-stack>label { font-size: 12px; }.form-stack>input { min-height: 49px; }.auth-story { background: radial-gradient(ellipse at 90% 80%, #164d62, transparent 65%), #0e1b30; }
+@media (max-width: 1100px) { .assistant-layout { grid-template-columns: 1fr; }.hero-emblem { width: 140px; height: 145px; }.metric-top { font-size: 11px; } }
+@media (max-width: 760px) { .executive-banner { padding: 26px 22px; border-radius: 17px; }.hero-emblem, .ai-orbit { display: none; }.executive-banner h1, .executive-banner h2 { font-size: 30px; }.executive-banner .heading-actions { flex-wrap: wrap; gap: 14px; }.topbar { min-height: 65px; }.premium-stats .stat-card { padding: 16px 13px; }.metric-top { font-size: 10px; }.metric-bottom { font-size: 9px; }.assistant-panel { padding: 20px; }.assistant-compose textarea { font-size: 16px; }.assistant-welcome { padding: 23px 4px; } }

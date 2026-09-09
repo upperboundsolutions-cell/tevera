@@ -1,0 +1,10 @@
+@extends('layouts.app')
+@section('title','Notifications')
+@section('content')
+<div class="page-heading"><div><h1>Event notifications</h1><p class="muted">Choose recorded tracker events for vehicles you can access. Messages go only to your account email.</p></div></div>
+<section class="panel"><form method="POST" action="{{ route('notifications.save') }}" class="fleet-form">@csrf
+<p class="muted">Delivery mode: {{ in_array(config('mail.default'), ['log','array']) ? 'Local preview — no email is sent' : 'Email transport — delivery depends on server configuration' }}. Checks run every minute while the scheduler is running, covering the previous ten minutes. Longer outages require reviewing journey events manually.</p>
+<div class="fleet-grid">@foreach($types as $value=>$label)<label class="checkbox"><input type="checkbox" name="events[]" value="{{ $value }}" @checked(in_array($value,json_decode($preference->events ?? '[]',true)))>{{ $label }}</label>@endforeach</div>
+<label class="checkbox"><input type="checkbox" name="email_enabled" value="1" @checked($preference->email_enabled ?? false)> Enable these notifications for my account</label><div class="fleet-save"><button class="primary">Save preferences</button></div></form></section>
+<section class="panel fleet-section"><h2>Delivery activity</h2><p class="muted">Previewed means local output only. Accepted means the mail transport accepted the message, not confirmed inbox delivery. Uncertain or sending requires an administrator to inspect mail logs; automatic resend is avoided.</p><div class="table-scroll"><table class="fleet-table"><thead><tr><th>Event</th><th>Recorded UTC</th><th>Status</th></tr></thead><tbody>@forelse($deliveries as $delivery)<tr><td>{{ $types[$delivery->event_type] ?? $delivery->event_type }}</td><td>{{ $delivery->occurred_at }}</td><td>{{ $delivery->status }}</td></tr>@empty<tr><td colspan="3">No notification activity yet.</td></tr>@endforelse</tbody></table></div>{{ $deliveries->links() }}</section>
+@endsection

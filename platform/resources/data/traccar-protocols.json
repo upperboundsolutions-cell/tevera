@@ -1,0 +1,1066 @@
+[
+    {
+        "name":  "adm",
+        "port":  5092
+    },
+    {
+        "name":  "ais",
+        "port":  5130
+    },
+    {
+        "name":  "alematics",
+        "port":  5140
+    },
+    {
+        "name":  "anytrek",
+        "port":  5177
+    },
+    {
+        "name":  "apel",
+        "port":  5041
+    },
+    {
+        "name":  "aplicom",
+        "port":  5049
+    },
+    {
+        "name":  "appello",
+        "port":  5109
+    },
+    {
+        "name":  "aquila",
+        "port":  5089
+    },
+    {
+        "name":  "ardi01",
+        "port":  5075
+    },
+    {
+        "name":  "arknav",
+        "port":  5107
+    },
+    {
+        "name":  "arknavx8",
+        "port":  5119
+    },
+    {
+        "name":  "armoli",
+        "port":  5238
+    },
+    {
+        "name":  "arnavi",
+        "port":  5100
+    },
+    {
+        "name":  "astra",
+        "port":  5103
+    },
+    {
+        "name":  "at2000",
+        "port":  5128
+    },
+    {
+        "name":  "atrack",
+        "port":  5044
+    },
+    {
+        "name":  "auro",
+        "port":  5096
+    },
+    {
+        "name":  "austinnb",
+        "port":  5158
+    },
+    {
+        "name":  "autofon",
+        "port":  5077
+    },
+    {
+        "name":  "autograde",
+        "port":  5120
+    },
+    {
+        "name":  "autotrack",
+        "port":  5172
+    },
+    {
+        "name":  "avema",
+        "port":  5171
+    },
+    {
+        "name":  "avl301",
+        "port":  5085
+    },
+    {
+        "name":  "b2316",
+        "port":  5230
+    },
+    {
+        "name":  "bce",
+        "port":  5080
+    },
+    {
+        "name":  "blackkite",
+        "port":  5091
+    },
+    {
+        "name":  "blue",
+        "port":  5206
+    },
+    {
+        "name":  "box",
+        "port":  5065
+    },
+    {
+        "name":  "bstpl",
+        "port":  5241
+    },
+    {
+        "name":  "bws",
+        "port":  5260
+    },
+    {
+        "name":  "c2stek",
+        "port":  5181
+    },
+    {
+        "name":  "calamp",
+        "port":  5082
+    },
+    {
+        "name":  "carcell",
+        "port":  5114
+    },
+    {
+        "name":  "carscop",
+        "port":  5040
+    },
+    {
+        "name":  "cartrack",
+        "port":  5061
+    },
+    {
+        "name":  "castel",
+        "port":  5086
+    },
+    {
+        "name":  "cautela",
+        "port":  5160
+    },
+    {
+        "name":  "cellocator",
+        "port":  5033
+    },
+    {
+        "name":  "cguard",
+        "port":  5123
+    },
+    {
+        "name":  "cityeasy",
+        "port":  5088
+    },
+    {
+        "name":  "continental",
+        "port":  5161
+    },
+    {
+        "name":  "cradlepoint",
+        "port":  5118
+    },
+    {
+        "name":  "dingtek",
+        "port":  5208
+    },
+    {
+        "name":  "disha",
+        "port":  5097
+    },
+    {
+        "name":  "dmt",
+        "port":  5137
+    },
+    {
+        "name":  "dmthttp",
+        "port":  5139
+    },
+    {
+        "name":  "dolphin",
+        "port":  5219
+    },
+    {
+        "name":  "dragino",
+        "port":  5253
+    },
+    {
+        "name":  "dsf22",
+        "port":  5236
+    },
+    {
+        "name":  "dualcam",
+        "port":  5232
+    },
+    {
+        "name":  "dway",
+        "port":  5150
+    },
+    {
+        "name":  "easytrack",
+        "port":  5056
+    },
+    {
+        "name":  "eelink",
+        "port":  5064
+    },
+    {
+        "name":  "egts",
+        "port":  5162
+    },
+    {
+        "name":  "enfora",
+        "port":  5008
+    },
+    {
+        "name":  "ennfu",
+        "port":  5220
+    },
+    {
+        "name":  "envotech",
+        "port":  5240
+    },
+    {
+        "name":  "eseal",
+        "port":  5169
+    },
+    {
+        "name":  "esky",
+        "port":  5147
+    },
+    {
+        "name":  "extremtrac",
+        "port":  5126
+    },
+    {
+        "name":  "fifotrack",
+        "port":  5124
+    },
+    {
+        "name":  "fleetguide",
+        "port":  5254
+    },
+    {
+        "name":  "flespi",
+        "port":  5149
+    },
+    {
+        "name":  "flexapi",
+        "port":  5235
+    },
+    {
+        "name":  "flexcomm",
+        "port":  5142
+    },
+    {
+        "name":  "flexiblereport",
+        "port":  5227
+    },
+    {
+        "name":  "flextrack",
+        "port":  5090
+    },
+    {
+        "name":  "fox",
+        "port":  5105
+    },
+    {
+        "name":  "freedom",
+        "port":  5066
+    },
+    {
+        "name":  "freematics",
+        "port":  5170
+    },
+    {
+        "name":  "futureway",
+        "port":  5213
+    },
+    {
+        "name":  "g1rus",
+        "port":  5244
+    },
+    {
+        "name":  "galileo",
+        "port":  5034
+    },
+    {
+        "name":  "gator",
+        "port":  5052
+    },
+    {
+        "name":  "genx",
+        "port":  5148
+    },
+    {
+        "name":  "gl100",
+        "port":  5003
+    },
+    {
+        "name":  "gl200",
+        "port":  5004
+    },
+    {
+        "name":  "gl601",
+        "port":  5257
+    },
+    {
+        "name":  "globalsat",
+        "port":  5043
+    },
+    {
+        "name":  "globalstar",
+        "port":  5185
+    },
+    {
+        "name":  "gnx",
+        "port":  5106
+    },
+    {
+        "name":  "gosafe",
+        "port":  5078
+    },
+    {
+        "name":  "gotop",
+        "port":  5050
+    },
+    {
+        "name":  "gps056",
+        "port":  5141
+    },
+    {
+        "name":  "gps103",
+        "port":  5001
+    },
+    {
+        "name":  "gpsgate",
+        "port":  5026
+    },
+    {
+        "name":  "gpsmarker",
+        "port":  5057
+    },
+    {
+        "name":  "gpsmta",
+        "port":  5038
+    },
+    {
+        "name":  "granit",
+        "port":  5113
+    },
+    {
+        "name":  "gs100",
+        "port":  5223
+    },
+    {
+        "name":  "gt02",
+        "port":  5022
+    },
+    {
+        "name":  "gt06",
+        "port":  5023
+    },
+    {
+        "name":  "gt30",
+        "port":  5131
+    },
+    {
+        "name":  "h02",
+        "port":  5013
+    },
+    {
+        "name":  "haicom",
+        "port":  5063
+    },
+    {
+        "name":  "homtecs",
+        "port":  5104
+    },
+    {
+        "name":  "hoopo",
+        "port":  5231
+    },
+    {
+        "name":  "huasheng",
+        "port":  5111
+    },
+    {
+        "name":  "hunterpro",
+        "port":  5116
+    },
+    {
+        "name":  "hyn600",
+        "port":  5258
+    },
+    {
+        "name":  "idpl",
+        "port":  5110
+    },
+    {
+        "name":  "intellitrac",
+        "port":  5037
+    },
+    {
+        "name":  "iotm",
+        "port":  5218
+    },
+    {
+        "name":  "its",
+        "port":  5179
+    },
+    {
+        "name":  "ivt401",
+        "port":  5153
+    },
+    {
+        "name":  "jido",
+        "port":  5237
+    },
+    {
+        "name":  "jimiphoto",
+        "port":  5267
+    },
+    {
+        "name":  "jmak",
+        "port":  5259
+    },
+    {
+        "name":  "jpkorjar",
+        "port":  5122
+    },
+    {
+        "name":  "jt1078",
+        "port":  5263
+    },
+    {
+        "name":  "jt600",
+        "port":  5014
+    },
+    {
+        "name":  "jt808",
+        "port":  5015
+    },
+    {
+        "name":  "kenji",
+        "port":  5102
+    },
+    {
+        "name":  "khd",
+        "port":  5058
+    },
+    {
+        "name":  "l100",
+        "port":  5112
+    },
+    {
+        "name":  "laipac",
+        "port":  5048
+    },
+    {
+        "name":  "leafspy",
+        "port":  5193
+    },
+    {
+        "name":  "m2c",
+        "port":  5157
+    },
+    {
+        "name":  "m2m",
+        "port":  5054
+    },
+    {
+        "name":  "maestro",
+        "port":  5129
+    },
+    {
+        "name":  "manpower",
+        "port":  5042
+    },
+    {
+        "name":  "mavlink2",
+        "port":  5224
+    },
+    {
+        "name":  "maxpb",
+        "port":  5221
+    },
+    {
+        "name":  "megastek",
+        "port":  5024
+    },
+    {
+        "name":  "meiligao",
+        "port":  5009
+    },
+    {
+        "name":  "meitrack",
+        "port":  5020
+    },
+    {
+        "name":  "mictrack",
+        "port":  5191
+    },
+    {
+        "name":  "milesmate",
+        "port":  5176
+    },
+    {
+        "name":  "minifinder",
+        "port":  5062
+    },
+    {
+        "name":  "minifinder2",
+        "port":  5187
+    },
+    {
+        "name":  "mobilogix",
+        "port":  5216
+    },
+    {
+        "name":  "moovbox",
+        "port":  5212
+    },
+    {
+        "name":  "motor",
+        "port":  5202
+    },
+    {
+        "name":  "mta6",
+        "port":  5028
+    },
+    {
+        "name":  "mtx",
+        "port":  5083
+    },
+    {
+        "name":  "mxt",
+        "port":  5087
+    },
+    {
+        "name":  "navigil",
+        "port":  5025
+    },
+    {
+        "name":  "navis",
+        "port":  5019
+    },
+    {
+        "name":  "naviset",
+        "port":  5194
+    },
+    {
+        "name":  "ndtpv6",
+        "port":  5243
+    },
+    {
+        "name":  "neos",
+        "port":  5183
+    },
+    {
+        "name":  "net",
+        "port":  5215
+    },
+    {
+        "name":  "niot",
+        "port":  5210
+    },
+    {
+        "name":  "noran",
+        "port":  5053
+    },
+    {
+        "name":  "nto",
+        "port":  5250
+    },
+    {
+        "name":  "nvs",
+        "port":  5101
+    },
+    {
+        "name":  "nyitech",
+        "port":  5182
+    },
+    {
+        "name":  "obddongle",
+        "port":  5115
+    },
+    {
+        "name":  "oigo",
+        "port":  5121
+    },
+    {
+        "name":  "oko",
+        "port":  5152
+    },
+    {
+        "name":  "omnicomm",
+        "port":  5203
+    },
+    {
+        "name":  "opengts",
+        "port":  5159
+    },
+    {
+        "name":  "orion",
+        "port":  5070
+    },
+    {
+        "name":  "osmand",
+        "port":  5055
+    },
+    {
+        "name":  "outsafe",
+        "port":  5200
+    },
+    {
+        "name":  "owntracks",
+        "port":  5144
+    },
+    {
+        "name":  "pacifictrack",
+        "port":  5198
+    },
+    {
+        "name":  "pathaway",
+        "port":  5099
+    },
+    {
+        "name":  "piligrim",
+        "port":  5059
+    },
+    {
+        "name":  "plugin",
+        "port":  5192
+    },
+    {
+        "name":  "polte",
+        "port":  5214
+    },
+    {
+        "name":  "portman",
+        "port":  5211
+    },
+    {
+        "name":  "positrex",
+        "port":  5252
+    },
+    {
+        "name":  "pretrace",
+        "port":  5133
+    },
+    {
+        "name":  "pricol",
+        "port":  5134
+    },
+    {
+        "name":  "progress",
+        "port":  5012
+    },
+    {
+        "name":  "pst",
+        "port":  5207
+    },
+    {
+        "name":  "pt215",
+        "port":  5197
+    },
+    {
+        "name":  "pt3000",
+        "port":  5045
+    },
+    {
+        "name":  "pt502",
+        "port":  5017
+    },
+    {
+        "name":  "pt60",
+        "port":  5164
+    },
+    {
+        "name":  "pui",
+        "port":  5249
+    },
+    {
+        "name":  "r12w",
+        "port":  5226
+    },
+    {
+        "name":  "r16h",
+        "port":  5266
+    },
+    {
+        "name":  "racedynamics",
+        "port":  5195
+    },
+    {
+        "name":  "radar",
+        "port":  5188
+    },
+    {
+        "name":  "radshid",
+        "port":  5265
+    },
+    {
+        "name":  "ramac",
+        "port":  5251
+    },
+    {
+        "name":  "raveon",
+        "port":  5117
+    },
+    {
+        "name":  "recoda",
+        "port":  5151
+    },
+    {
+        "name":  "retranslator",
+        "port":  5167
+    },
+    {
+        "name":  "rftrack",
+        "port":  5245
+    },
+    {
+        "name":  "riti",
+        "port":  5071
+    },
+    {
+        "name":  "robotrack",
+        "port":  5163
+    },
+    {
+        "name":  "rst",
+        "port":  5196
+    },
+    {
+        "name":  "ruptela",
+        "port":  5046
+    },
+    {
+        "name":  "s168",
+        "port":  5204
+    },
+    {
+        "name":  "sabertek",
+        "port":  5166
+    },
+    {
+        "name":  "sanav",
+        "port":  5051
+    },
+    {
+        "name":  "sanul",
+        "port":  5186
+    },
+    {
+        "name":  "satsol",
+        "port":  5184
+    },
+    {
+        "name":  "sigfox",
+        "port":  5154
+    },
+    {
+        "name":  "siwi",
+        "port":  5135
+    },
+    {
+        "name":  "skypatrol",
+        "port":  5021
+    },
+    {
+        "name":  "smartcar",
+        "port":  5262
+    },
+    {
+        "name":  "smartsole",
+        "port":  5178
+    },
+    {
+        "name":  "smokey",
+        "port":  5125
+    },
+    {
+        "name":  "snapper",
+        "port":  5256
+    },
+    {
+        "name":  "solarpowered",
+        "port":  5201
+    },
+    {
+        "name":  "spot",
+        "port":  5156
+    },
+    {
+        "name":  "starcom",
+        "port":  5190
+    },
+    {
+        "name":  "starlink",
+        "port":  5136
+    },
+    {
+        "name":  "startek",
+        "port":  5222
+    },
+    {
+        "name":  "stb",
+        "port":  5229
+    },
+    {
+        "name":  "stl060",
+        "port":  5060
+    },
+    {
+        "name":  "suntech",
+        "port":  5011
+    },
+    {
+        "name":  "supermate",
+        "port":  5108
+    },
+    {
+        "name":  "svias",
+        "port":  5168
+    },
+    {
+        "name":  "swiftech",
+        "port":  5217
+    },
+    {
+        "name":  "t55",
+        "port":  5005
+    },
+    {
+        "name":  "t57",
+        "port":  5155
+    },
+    {
+        "name":  "t622iridium",
+        "port":  5248
+    },
+    {
+        "name":  "t800x",
+        "port":  5094
+    },
+    {
+        "name":  "taip",
+        "port":  5031
+    },
+    {
+        "name":  "techtlt",
+        "port":  5189
+    },
+    {
+        "name":  "techtocruz",
+        "port":  5234
+    },
+    {
+        "name":  "tek",
+        "port":  5173
+    },
+    {
+        "name":  "telemax",
+        "port":  5165
+    },
+    {
+        "name":  "telic",
+        "port":  5067
+    },
+    {
+        "name":  "teltonika",
+        "port":  5027
+    },
+    {
+        "name":  "teratrack",
+        "port":  5239
+    },
+    {
+        "name":  "thinkpower",
+        "port":  5228
+    },
+    {
+        "name":  "thinkrace",
+        "port":  5098
+    },
+    {
+        "name":  "thuraya",
+        "port":  5242
+    },
+    {
+        "name":  "tk102",
+        "port":  5036
+    },
+    {
+        "name":  "tk103",
+        "port":  5002
+    },
+    {
+        "name":  "tlt2h",
+        "port":  5030
+    },
+    {
+        "name":  "tlv",
+        "port":  5146
+    },
+    {
+        "name":  "tmg",
+        "port":  5132
+    },
+    {
+        "name":  "topflytech",
+        "port":  5047
+    },
+    {
+        "name":  "topin",
+        "port":  5199
+    },
+    {
+        "name":  "totem",
+        "port":  5007
+    },
+    {
+        "name":  "tr20",
+        "port":  5018
+    },
+    {
+        "name":  "tr900",
+        "port":  5074
+    },
+    {
+        "name":  "trackbox",
+        "port":  5068
+    },
+    {
+        "name":  "trakmate",
+        "port":  5127
+    },
+    {
+        "name":  "tramigo",
+        "port":  5073
+    },
+    {
+        "name":  "transync",
+        "port":  5247
+    },
+    {
+        "name":  "trv",
+        "port":  5010
+    },
+    {
+        "name":  "tt8850",
+        "port":  5079
+    },
+    {
+        "name":  "ttnhttp",
+        "port":  5261
+    },
+    {
+        "name":  "tytan",
+        "port":  5084
+    },
+    {
+        "name":  "tzone",
+        "port":  5029
+    },
+    {
+        "name":  "ulbotech",
+        "port":  5072
+    },
+    {
+        "name":  "upro",
+        "port":  5095
+    },
+    {
+        "name":  "uux",
+        "port":  5225
+    },
+    {
+        "name":  "v680",
+        "port":  5016
+    },
+    {
+        "name":  "valtrack",
+        "port":  5255
+    },
+    {
+        "name":  "visiontek",
+        "port":  5069
+    },
+    {
+        "name":  "vlt",
+        "port":  5246
+    },
+    {
+        "name":  "vnet",
+        "port":  5205
+    },
+    {
+        "name":  "vt200",
+        "port":  5143
+    },
+    {
+        "name":  "vtfms",
+        "port":  5145
+    },
+    {
+        "name":  "watch",
+        "port":  5093
+    },
+    {
+        "name":  "wialon",
+        "port":  5039
+    },
+    {
+        "name":  "wli",
+        "port":  5209
+    },
+    {
+        "name":  "wondex",
+        "port":  5032
+    },
+    {
+        "name":  "wristband",
+        "port":  5174
+    },
+    {
+        "name":  "xexun",
+        "port":  5006
+    },
+    {
+        "name":  "xexun2",
+        "port":  5233
+    },
+    {
+        "name":  "xexun3",
+        "port":  5264
+    },
+    {
+        "name":  "xirgo",
+        "port":  5081
+    },
+    {
+        "name":  "xrb28",
+        "port":  5180
+    },
+    {
+        "name":  "xt013",
+        "port":  5076
+    },
+    {
+        "name":  "xt2400",
+        "port":  5138
+    },
+    {
+        "name":  "ywt",
+        "port":  5035
+    }
+]

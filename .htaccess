@@ -1,0 +1,6 @@
+# This directory contains server source and private Laravel configuration.
+# XAMPP uses PHP 8.2; the Laravel application runs on its PHP 8.3 local server.
+Options -Indexes
+RewriteEngine On
+RewriteRule ^$ http://127.0.0.1:8000/login [R=302,L]
+RewriteRule ^ - [F,L]

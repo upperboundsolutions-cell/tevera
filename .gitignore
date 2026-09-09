@@ -1,0 +1,24 @@
+target
+nbactions.xml
+.classpath
+.project
+.settings
+.idea
+*.iml
+.DS_Store
+.checkstyle
+.gradle
+out
+build
+.vscode
+bin
+/.tools/
+/deploy/.env
+/deploy/.operation.lock
+/deploy/backups/
+
+# Local application dependencies, runtime files, and environment settings
+/platform/.env
+/platform/vendor/
+/platform/node_modules/
+/platform/storage/

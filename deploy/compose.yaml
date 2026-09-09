@@ -1,0 +1,148 @@
+name: tevera
+x-app: &app
+  image: tevera-app:local
+  build:
+    context: ..
+    dockerfile: deploy/app.Dockerfile
+  restart: unless-stopped
+  environment: &app-env
+    APP_NAME: TEVERA
+    APP_ENV: production
+    APP_DEBUG: "false"
+    AI_ENABLED: ${AI_ENABLED:-false}
+    AI_PROVIDER: ${AI_PROVIDER:-openai}
+    AI_BASE_URL: ${AI_BASE_URL:-}
+    AI_MODEL: ${AI_MODEL:-}
+    AI_API_KEY: ${AI_API_KEY:-}
+    OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    OPENAI_MODEL: ${OPENAI_MODEL:-}
+    APP_KEY: ${APP_KEY:?Run setup first}
+    APP_URL: https://${DOMAIN:?Set DOMAIN}
+    TRUST_DOCKER_PROXY: "true"
+    DB_CONNECTION: mysql
+    DB_HOST: app-db
+    DB_DATABASE: tevera
+    DB_USERNAME: tevera
+    DB_PASSWORD: ${DB_PASSWORD:?Run setup first}
+    SESSION_DRIVER: database
+    SESSION_ENCRYPT: "true"
+    SESSION_SECURE_COOKIE: "true"
+    CACHE_STORE: database
+    QUEUE_CONNECTION: database
+    LOG_CHANNEL: stderr
+    LOG_LEVEL: warning
+    TRACCAR_URL: http://traccar:8082
+    TRACCAR_PRIVATE_HOST: traccar
+    TRACCAR_DEVICE_HOST: ${TRACCAR_DEVICE_HOST:-}
+    TRACCAR_CLIENT_URL: ${TRACCAR_CLIENT_URL:-}
+    TRACCAR_USERNAME: ${TRACCAR_USERNAME:?Run setup first}
+    TRACCAR_PASSWORD: ${TRACCAR_PASSWORD:?Run setup first}
+    TRACCAR_PORT_OVERRIDES: '{"gt06":${GT06_PORT:-5023},"teltonika":${TELTONIKA_PORT:-5027},"osmand":${OSMAND_PORT:-5055}}'
+    PAYNOW_ENABLED: ${PAYNOW_ENABLED:-false}
+    PAYNOW_INTEGRATION_ID: ${PAYNOW_INTEGRATION_ID:-}
+    PAYNOW_INTEGRATION_KEY: ${PAYNOW_INTEGRATION_KEY:-}
+    PAYNOW_CURRENCY: ${PAYNOW_CURRENCY:-}
+    PAYNOW_PUBLIC_URL: https://${DOMAIN}
+    MAIL_MAILER: ${MAIL_MAILER:-log}
+    MAIL_HOST: ${MAIL_HOST:-}
+    MAIL_PORT: ${MAIL_PORT:-587}
+    MAIL_USERNAME: ${MAIL_USERNAME:-}
+    MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+    MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS:-}
+  volumes:
+    - app-storage:/var/www/html/storage
+  depends_on:
+    app-db:
+      condition: service_healthy
+  networks: [private, outbound]
+  logging: &logging
+    driver: json-file
+    options: {max-size: "10m", max-file: "3"}
+services:
+  app:
+    <<: *app
+    healthcheck:
+      test: [CMD, php, -r, "exit(@file_get_contents('http://127.0.0.1/up') === false ? 1 : 0);"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  worker:
+    <<: *app
+    command: [php, artisan, queue:work, --sleep=3, --tries=3, --timeout=60, --max-time=3600]
+  scheduler:
+    <<: *app
+    command: [php, artisan, schedule:work]
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN}
+      TLS_EMAIL: ${TLS_EMAIL}
+    ports: ["80:80", "443:443", "443:443/udp"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks: [private, outbound]
+    depends_on: [app]
+    logging: *logging
+  app-db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: tevera
+      MARIADB_USER: tevera
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Run setup first}
+    volumes: ["app-db:/var/lib/mysql"]
+    networks: [private]
+    healthcheck: &db-health
+      test: [CMD, healthcheck.sh, --connect, --innodb_initialized]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+    logging: *logging
+  tracker-db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: traccar
+      MARIADB_USER: traccar
+      MARIADB_PASSWORD: ${TRACKER_DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${TRACKER_DB_ROOT_PASSWORD:?Run setup first}
+    volumes: ["tracker-db:/var/lib/mysql"]
+    networks: [private]
+    healthcheck: *db-health
+    logging: *logging
+  traccar:
+    image: tevera-traccar:local
+    build:
+      context: ..
+      dockerfile: deploy/traccar.Dockerfile
+    restart: unless-stopped
+    environment:
+      CONFIG_USE_ENVIRONMENT_VARIABLES: "true"
+      DATABASE_PASSWORD: ${TRACKER_DB_PASSWORD:?Run setup first}
+    ports:
+      - "${GT06_PORT:-5023}:5023"
+      - "${GT06_PORT:-5023}:5023/udp"
+      - "${TELTONIKA_PORT:-5027}:5027"
+      - "${TELTONIKA_PORT:-5027}:5027/udp"
+      - "${OSMAND_PORT:-5055}:5055"
+    volumes: ["tracker-media:/opt/traccar/media"]
+    networks: [private, outbound]
+    depends_on:
+      tracker-db:
+        condition: service_healthy
+    logging: *logging
+networks:
+  private:
+    internal: true
+  outbound: {}
+volumes:
+  app-db:
+  tracker-db:
+  app-storage:
+  tracker-media:
+  caddy-data:
+  caddy-config:

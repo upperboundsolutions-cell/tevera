@@ -1,0 +1,123 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+cd "$ROOT"
+umask 077
+dc() { docker compose --env-file "$ROOT/deploy/.env" -f "$ROOT/deploy/compose.yaml" "$@"; }
+die() {
+	printf '%s\n' "$*" >&2
+	exit 1
+}
+need_config() { [[ -f deploy/.env ]] || die 'Run ./tevera setup first.'; }
+command -v docker >/dev/null || die 'Install Docker Engine and Docker Compose v2 on your Linux VPS first.'
+docker compose version >/dev/null
+case "${1:-help}" in
+setup)
+	[[ ! -e deploy/.env ]] || die 'deploy/.env already exists. Edit it directly; existing secrets were preserved.'
+	command -v openssl >/dev/null || die 'Install openssl first.'
+	read -r -p 'Public domain (for example fleet.example.com): ' domain
+	[[ "$domain" =~ ^[a-zA-Z0-9]([a-zA-Z0-9.-]*[a-zA-Z0-9])?\.[a-zA-Z]{2,}$ ]] || die 'Enter a hostname without https://, a port or a path.'
+	read -r -p 'Email for HTTPS certificate notices: ' email
+	[[ "$email" =~ ^[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]] || die 'Invalid email.'
+	sed -E '/^(DOMAIN|TLS_EMAIL|APP_KEY|DB_PASSWORD|DB_ROOT_PASSWORD|TRACKER_DB_PASSWORD|TRACKER_DB_ROOT_PASSWORD|TRACCAR_PASSWORD|TRACCAR_USERNAME|MAIL_FROM_ADDRESS)=/d' deploy/.env.example >deploy/.env
+	{
+		printf '\nDOMAIN=%s\nTLS_EMAIL=%s\n' "$domain" "$email"
+		printf 'APP_KEY=base64:%s\n' "$(openssl rand -base64 32)"
+		for key in DB_PASSWORD DB_ROOT_PASSWORD TRACKER_DB_PASSWORD TRACKER_DB_ROOT_PASSWORD TRACCAR_PASSWORD; do
+			printf '%s=%s\n' "$key" "$(openssl rand -hex 32)"
+		done
+		printf 'TRACCAR_USERNAME=tevera-service@%s\nMAIL_FROM_ADDRESS=noreply@%s\n' "$domain" "$domain"
+	} >>deploy/.env
+	read -r -p 'Configure Paynow credentials now? [y/N]: ' paynow
+	if [[ "$paynow" == y || "$paynow" == Y ]]; then
+		read -r -p 'Integration ID: ' integration_id
+		read -r -s -p 'Integration key (hidden): ' integration_key
+		printf '\n'
+		read -r -p 'Merchant currency (for example USD): ' currency
+		[[ "$integration_id" =~ ^[0-9]+$ && "$integration_key" =~ ^[a-zA-Z0-9-]+$ && "$currency" =~ ^[A-Z]{3}$ ]] || die 'Invalid Paynow values. Correct them in deploy/.env.'
+		sed -E '/^(PAYNOW_INTEGRATION_ID|PAYNOW_INTEGRATION_KEY|PAYNOW_CURRENCY)=/d' deploy/.env >deploy/.env.tmp
+		mv deploy/.env.tmp deploy/.env
+		printf 'PAYNOW_INTEGRATION_ID=%s\nPAYNOW_INTEGRATION_KEY=%s\nPAYNOW_CURRENCY=%s\n' "$integration_id" "$integration_key" "$currency" >>deploy/.env
+	fi
+	chmod 600 deploy/.env
+	dc config --quiet
+	printf 'Configuration saved privately. Point DNS to this VPS, then run ./tevera start. Paynow stays disabled until you enable it.\n'
+	;;
+start | stop | backup | restore | update)
+	need_config
+	command -v flock >/dev/null || die 'Install util-linux (flock) first.'
+	exec 9>deploy/.operation.lock
+	flock -n 9 || die 'Another deployment operation is running.'
+	backup() {
+		local dest="$ROOT/deploy/backups/$(date -u +%Y%m%dT%H%M%SZ)"
+		mkdir -p "$dest"
+		trap 'dc up -d app worker scheduler traccar caddy >/dev/null || true' EXIT
+		dc stop caddy app worker scheduler traccar
+		dc exec -T app-db sh -c 'MYSQL_PWD="$MARIADB_ROOT_PASSWORD" mariadb-dump -uroot --single-transaction --routines --events --databases tevera --add-drop-database' >"$dest/app.sql"
+		dc exec -T tracker-db sh -c 'MYSQL_PWD="$MARIADB_ROOT_PASSWORD" mariadb-dump -uroot --single-transaction --routines --events --databases traccar --add-drop-database' >"$dest/tracker.sql"
+		dc run --rm --no-deps -T --entrypoint tar app -czf - -C /var/www/html/storage . >"$dest/storage.tgz"
+		dc run --rm --no-deps -T --entrypoint tar traccar -czf - -C /opt/traccar/media . >"$dest/media.tgz"
+		cp deploy/.env "$dest/deploy.env"
+		(cd "$dest" && sha256sum app.sql tracker.sql storage.tgz media.tgz deploy.env >SHA256SUMS)
+		dc up -d app worker scheduler traccar caddy
+		trap - EXIT
+		printf 'Backup completed: %s\nKeep an encrypted off-server copy; this directory contains secrets and GPS data.\n' "$dest"
+	}
+	case "$1" in
+	start)
+		dc build
+		dc up -d --wait app-db tracker-db
+		dc stop caddy app worker scheduler traccar
+		dc run --rm --no-deps app php artisan migrate --force
+		dc up -d
+		printf 'Services started. First installation: ./tevera admin, then ./tevera link-traccar.\n'
+		;;
+	stop) dc stop ;;
+	backup) backup ;;
+	update)
+		backup
+		dc build --pull
+		dc stop caddy app worker scheduler traccar
+		dc run --rm --no-deps app php artisan migrate --force
+		dc up -d
+		printf 'Updated from the source currently in this folder. Run ./tevera status.\n'
+		;;
+	restore)
+		[[ "${3:-}" == --confirm-replace-data ]] || die 'Usage: ./tevera restore BACKUP_DIRECTORY --confirm-replace-data (replaces both databases and stored files).'
+		src="$(realpath -- "${2:?Supply a backup directory}")"
+		[[ -f "$src/SHA256SUMS" ]] || die 'Missing backup manifest.'
+		(cd "$src" && sha256sum -c SHA256SUMS)
+		cmp -s deploy/.env "$src/deploy.env" || die 'Configuration differs. Use the backup deploy.env on a clean recovery installation, then retry. Do not change passwords on existing database volumes.'
+		dc stop caddy app worker scheduler traccar
+		dc up -d --wait app-db tracker-db
+		dc exec -T app-db sh -c 'MYSQL_PWD="$MARIADB_ROOT_PASSWORD" mariadb -uroot' <"$src/app.sql"
+		dc exec -T tracker-db sh -c 'MYSQL_PWD="$MARIADB_ROOT_PASSWORD" mariadb -uroot' <"$src/tracker.sql"
+		dc run --rm --no-deps -T --entrypoint sh app -c 'find /var/www/html/storage -mindepth 1 -delete && tar -xzf - -C /var/www/html/storage' <"$src/storage.tgz"
+		dc run --rm --no-deps -T --entrypoint sh traccar -c 'find /opt/traccar/media -mindepth 1 -delete && tar -xzf - -C /opt/traccar/media' <"$src/media.tgz"
+		printf 'Restore complete; services remain stopped. Use the matching source release, then run ./tevera start and ./tevera status.\n'
+		;;
+	esac
+	;;
+status)
+	need_config
+	dc ps
+	dc exec -T app php artisan platform:health
+	;;
+logs)
+	need_config
+	dc logs --tail=150 -f "${2:-app}"
+	;;
+admin)
+	need_config
+	dc exec app php artisan platform:create-user --role=super_admin
+	;;
+link-traccar)
+	need_config
+	dc exec app php artisan platform:link-traccar
+	;;
+config-check)
+	need_config
+	dc config --quiet
+	;;
+*) printf 'TEVERA: setup | start | stop | status | logs [service] | admin | link-traccar | backup | restore DIRECTORY --confirm-replace-data | update | config-check\n' ;;
+esac

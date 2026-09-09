@@ -1,0 +1,10 @@
+[Unit]
+Description=TEVERA consistent database and file backup
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/tevera
+ExecStart=/bin/bash /opt/tevera/tevera backup
+UMask=0077
