@@ -1,4 +1,8 @@
-# [Traccar](https://www.traccar.org)
+# TEVERA
+
+Vehicle tracking system with a Laravel fleet management interface and a Traccar GPS server.
+
+See [fleet operations](platform/docs/FLEET-OPERATIONS.md) for the dashboard, fuel, maintenance, reporting, notifications and payment setup.
 
 **TEVERA deployment:** See [the single-VPS setup guide](deploy/README.md) for Docker hosting, HTTPS, private Traccar connectivity, administration, backups and recovery. The management entry point is `./tevera` on Linux; `Start-TEVERA.cmd` remains the local Windows launcher.
 
