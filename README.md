@@ -1,67 +1,75 @@
 # TEVERA
 
-Vehicle tracking system with a Laravel fleet management interface and a Traccar GPS server.
+**Vehicle Tracking & Fleet Management**  
+**Upper Bound Solutions PVT · Always ahead.**
 
-See [fleet operations](platform/docs/FLEET-OPERATIONS.md) for the dashboard, fuel, maintenance, reporting, notifications and payment setup.
-
-**TEVERA deployment:** See [the single-VPS setup guide](deploy/README.md) for Docker hosting, HTTPS, private Traccar connectivity, administration, backups and recovery. The management entry point is `./tevera` on Linux; `Start-TEVERA.cmd` remains the local Windows launcher.
-
-## Overview
-
-Traccar is a free, open source GPS tracking platform. This repository contains the Java-based back-end server, which supports more than 200 GPS protocols and 2000+ models of GPS tracking devices out of the box. Traccar works with any major SQL database and provides an easy to use [REST API](https://www.traccar.org/traccar-api/).
-
-Traccar is built for anyone who needs to track vehicles, assets, or people: fleet operators, GPS tracking resellers running their own white-label platform, and individuals tracking their own devices. You can [self-host it for free](https://www.traccar.org/install-vps/), or use [official managed hosting](https://www.traccar.org/pricing/) if you'd rather not run a server yourself.
-
-| Web Dashboard |
-|---|
-| ![Traccar web dashboard](.github/screenshot.png) |
-
-Other parts of the Traccar platform:
-
-- [Traccar web app](https://github.com/traccar/traccar-web) - the browser-based tracking dashboard
-- [Traccar Manager app](https://github.com/traccar/traccar-manager) - mobile app for viewing your tracked devices
-
-There is also a set of mobile apps for tracking mobile devices themselves:
-
-- [Traccar Client app](https://github.com/traccar/traccar-client)
-
-## Quick Start
-
-Run Traccar with a production-grade MySQL database using Docker Compose:
-
-```shell
-curl -o compose.yaml https://raw.githubusercontent.com/traccar/traccar/master/docker/compose/traccar-mysql.yaml
-docker compose up -d
-```
-
-Traccar will be available on port `8082`. See the [Docker documentation](https://www.traccar.org/docker/) for other configuration options, or [try the live demo](https://www.traccar.org/demo-server/) without installing anything.
+TEVERA brings vehicle locations, fleet operations, customer management and billing into one workspace. Built for fleet owners and tracking businesses, it provides a clear view of vehicles, journeys and the tasks that need attention.
 
 ## Features
 
-Some of the available features include:
+- **Fleet overview:** vehicle states, recorded daily distance, recent alerts and overdue servicing.
+- **Vehicle tracking:** live location updates, vehicle details, geofences and journey playback.
+- **Fuel management:** fill-up records, running-cost comparisons and consumption calculations.
+- **Driver insights:** recorded driving events, scorecards and coaching suggestions.
+- **Maintenance:** service reminders by date or recorded mileage, repair costs and private documents.
+- **Customer tracking links:** temporary location sharing with expiry and revocation.
+- **Reports:** downloadable CSV reports and scheduled daily or weekly email summaries.
+- **Notifications:** configurable email and WhatsApp alerts.
+- **Business management:** customer workspaces, role-based access, subscription plans and audit logs.
+- **Payments:** separate USD and ZiG integration settings, with EcoCash available through configured Paynow checkout.
+- **Interface:** a monochrome dashboard, dark maps, mobile layouts and low-data mode.
 
-- Real-time GPS tracking
-- Driver behaviour monitoring
-- Detailed and summary reports
-- Geofencing functionality
-- Alarms and notifications
-- Account and device management
-- Email and SMS support
+Tracking and driver insights depend on available GPS data. Sensor-based fuel monitoring requires calibrated hardware. WhatsApp, email and payments require configured provider accounts. See the [fleet operations guide](platform/docs/FLEET-OPERATIONS.md) for setup and feature limitations.
 
-## Build
+## Run locally on Windows
 
-Please read the [build from source documentation](https://www.traccar.org/build/) on the official website.
+For the prepared local installation:
 
-## Community
+1. Start **MySQL** in the XAMPP Control Panel.
+2. Double-click **Start-TEVERA.cmd**.
+3. Sign in at the address opened by the launcher.
 
-- [Forums](https://www.traccar.org/forums/)
-- [Documentation](https://www.traccar.org/documentation/)
+The launcher normally uses `http://127.0.0.1:8000/login` and selects another local port if needed. The prepared installation uses a private PHP 8.3 runtime under `.tools`; that runtime and your credentials are not included in Git.
 
-## Team
+For a fresh installation, follow the [installation guide](platform/docs/INSTALLATION.md) to install PHP 8.3+, application dependencies and the database, build the frontend and create an administrator account. The GPS receiver runs as a separate service.
 
-- Anton Tananaev ([anton@traccar.org](mailto:anton@traccar.org))
-- Andrey Kunitsyn ([andrey@traccar.org](mailto:andrey@traccar.org))
+## Host on a VPS
 
-## License
+One Linux VPS can host TEVERA's web application, GPS server, databases, scheduler and queue worker using the included Docker deployment.
 
-Apache License, Version 2.0. See [LICENSE.txt](https://github.com/traccar/traccar/blob/master/LICENSE.txt) for details.
+After installing the prerequisites and configuring your domain as described in the [VPS deployment guide](deploy/README.md):
+
+```bash
+cd /opt/tevera
+chmod +x tevera
+./tevera setup
+./tevera start
+./tevera admin
+./tevera link-traccar
+./tevera status
+```
+
+The `link-traccar` command connects TEVERA to its underlying GPS engine. Customers access TEVERA through your HTTPS domain; GPS devices send data to the configured receiver ports.
+
+## Project structure
+
+| Path | Purpose |
+| --- | --- |
+| `platform/` | Laravel application, frontend, fleet operations and billing |
+| `src/`, `schema/`, `templates/` | GPS server source, database schema and server templates |
+| `deploy/` | Docker deployment, HTTPS configuration and backup tools |
+| `tools/` | Local startup and maintenance utilities |
+| `tevera` | Linux deployment management command |
+| `Start-TEVERA.cmd` | Windows application launcher |
+
+## Documentation
+
+- [Fleet operations and integrations](platform/docs/FLEET-OPERATIONS.md)
+- [Application installation](platform/docs/INSTALLATION.md)
+- [Single-VPS deployment and backups](deploy/README.md)
+- [Adding vehicles and GPS devices](platform/docs/FLEET-MANAGEMENT.md)
+- [Architecture](platform/docs/ARCHITECTURE.md)
+
+## Attribution and licenses
+
+TEVERA uses the Traccar open-source GPS engine. Upstream copyright notices and the Apache License are retained in [LICENSE.txt](LICENSE.txt) and the relevant source files. The repository also includes [LICENSE](LICENSE). Third-party components retain their respective licenses.
