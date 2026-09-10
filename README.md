@@ -1,7 +1,9 @@
 # TEVERA
 
-**Vehicle Tracking & Fleet Management**  
+**Vehicle Tracking & Fleet Management**
 **Upper Bound Solutions PVT · Always ahead.**
+
+Developed by **Tatenda J Majira**.
 
 TEVERA brings vehicle locations, fleet operations, customer management and billing into one workspace. Built for fleet owners and tracking businesses, it provides a clear view of vehicles, journeys and the tasks that need attention.
 
