@@ -25,7 +25,7 @@ class SubscriptionBilling
             $payment = DB::transaction(function () use ($actor, $plan) {
                 $customer = Customer::lockForUpdate()->findOrFail($actor->customer_id);
                 $plan->refresh();
-                if (! $this->gateway->ready() || ! $plan->is_active || $plan->currency !== config('paynow.currency') || $plan->amount_cents < 1) {
+                if (! $this->gateway->ready($plan->currency) || ! $plan->is_active || $plan->amount_cents < 1) {
                     throw ValidationException::withMessages(['plan_id' => 'This plan is not available for checkout yet.']);
                 }
                 if ($customer->billing_review_required) {

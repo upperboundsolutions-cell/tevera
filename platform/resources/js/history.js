@@ -1,8 +1,11 @@
+import 'leaflet/dist/leaflet.css';
+import '../css/tracking.css';
 import L from 'leaflet';
+function mapTiles(map) { const tiles=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:19, attribution:'&copy; OpenStreetMap contributors'}); let low=false; try { low=localStorage.getItem('tevera-low-data')==='1'; } catch {} if(!low) tiles.addTo(map); window.addEventListener('tevera-data-mode',e=>{if(e.detail) map.removeLayer(tiles); else tiles.addTo(map);}); }
 const picker = document.querySelector('[data-geofence-picker]');
 if (picker) {
     const map = L.map(picker).setView([-17.8252, 31.0335], 11);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'}).addTo(map);
+    mapTiles(map);
     const latitude = document.querySelector('input[name="latitude"]'), longitude = document.querySelector('input[name="longitude"]'), radius = document.querySelector('input[name="radius"]');
     let circle;
     const preview = () => {
@@ -19,7 +22,7 @@ const root = document.querySelector('[data-history-url]');
 if (root) {
     const find = selector => root.querySelector(selector);
     const map = L.map('history-map').setView([-17.8252, 31.0335], 10);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'}).addTo(map);
+    mapTiles(map);
     let points = [], route, marker, timer, controller;
     const slider = find('[data-history-slider]'), play = find('[data-history-play]'), status = find('[data-history-status]');
     const pause = () => { clearInterval(timer); timer = null; play.textContent = 'Play'; };
@@ -28,7 +31,7 @@ if (root) {
         const latlng = [point.latitude, point.longitude];
         if (!marker) marker = L.circleMarker(latlng, {radius: 9, color: '#fff', fillColor: '#1767e8', fillOpacity: 1}).addTo(map);
         marker.setLatLng(latlng);
-        find('[data-history-position]').textContent = `${Number(slider.value) + 1} / ${points.length} · ${point.time} · ${point.speed_kmh ?? 'Unknown'} km/h · ${point.latitude}, ${point.longitude}`;
+        find('[data-history-position]').textContent = `${Number(slider.value) + 1} / ${points.length} Â· ${point.time} Â· ${point.speed_kmh ?? 'Unknown'} km/h Â· ${point.latitude}, ${point.longitude}`;
     }
     function start() {
         pause(); if (!points.length) return;
@@ -48,7 +51,7 @@ if (root) {
         points = []; slider.disabled = play.disabled = find('[data-history-reset]').disabled = true;
         if (route) { map.removeLayer(route); route = null; } if (marker) { map.removeLayer(marker); marker = null; }
         find('[data-history-events]').replaceChildren(); find('[data-history-position]').textContent = '';
-        status.textContent = 'Loading recorded journey…'; find('[data-history-load]').disabled = true;
+        status.textContent = 'Loading recorded journeyâ€¦'; find('[data-history-load]').disabled = true;
         try {
             const query = new URLSearchParams(new FormData(event.target));
             const response = await fetch(`${root.dataset.historyUrl}?${query}`, {headers: {Accept: 'application/json'}, signal: current.signal});
@@ -57,7 +60,7 @@ if (root) {
             points = result.points; slider.max = Math.max(0, points.length - 1); slider.value = 0;
             slider.disabled = play.disabled = find('[data-history-reset]').disabled = !points.length;
             if (points.length) { route = L.polyline(points.map(p => [p.latitude, p.longitude]), {color: '#1767e8', weight: 4}).addTo(map); map.fitBounds(route.getBounds(), {padding: [30, 30], maxZoom: 16}); show(); }
-            status.textContent = `${points.length} recorded positions · ${result.events.length} events.${result.points_truncated || result.events_truncated ? ' Results limited. Shorten the time range.' : ''}${!points.length ? ' No valid GPS positions returned; this does not prove no movement occurred.' : ''}`;
+            status.textContent = `${points.length} recorded positions Â· ${result.events.length} events.${result.points_truncated || result.events_truncated ? ' Results limited. Shorten the time range.' : ''}${!points.length ? ' No valid GPS positions returned; this does not prove no movement occurred.' : ''}`;
             for (const item of result.events) { const row = document.createElement('tr'); for (const value of [item.time, item.type]) { const cell = document.createElement('td'); cell.textContent = value; row.append(cell); } find('[data-history-events]').append(row); }
         } catch (error) { if (controller === current) status.textContent = current.signal.aborted ? 'Request timed out or cancelled. Try a shorter range.' : error.message; }
         finally { clearTimeout(timeout); if (controller === current) find('[data-history-load]').disabled = false; }

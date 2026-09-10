@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\TraccarException;
 use App\Models\User;
 use App\Models\Vehicle;
 use Carbon\CarbonImmutable;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Mail;
 
 class FleetEventNotifications
 {
-    public const TYPES = ['geofenceEnter' => 'Geofence entry', 'geofenceExit' => 'Geofence exit', 'deviceOverspeed' => 'Recorded speeding', 'deviceOffline' => 'Tracker offline', 'alarm' => 'Tracker alarm'];
+    public const TYPES = ['geofenceEnter' => 'Geofence entry', 'geofenceExit' => 'Geofence exit', 'deviceOverspeed' => 'Recorded speeding', 'deviceOffline' => 'Tracker offline', 'alarm' => 'Tracker alarm', 'maintenanceDue' => 'Maintenance due'];
 
     public function run(): void
     {
@@ -22,7 +23,7 @@ class FleetEventNotifications
         try {
             $to = CarbonImmutable::now('UTC');
             $from = $to->subMinutes(10);
-            foreach (DB::table('notification_preferences')->where('email_enabled', true)->get() as $pref) {
+            foreach (DB::table('notification_preferences')->where(fn ($q) => $q->where('email_enabled', true)->orWhere('whatsapp_enabled', true))->get() as $pref) {
                 $user = User::find($pref->user_id);
                 if (! $user || ! $user->canAccessPlatform() || ($user->customer && ! $user->customer->subscriptionAllowsAccess())) {
                     continue;
@@ -32,7 +33,12 @@ class FleetEventNotifications
                     continue;
                 }
                 foreach (Vehicle::visibleTo($user)->where('is_active', true)->whereNotNull('traccar_device_id')->cursor() as $vehicle) {
-                    foreach (app(TraccarService::class)->getEvents($vehicle->traccar_device_id, $from->toIso8601String(), $to->toIso8601String()) as $event) {
+                    try {
+                        $events = app(TraccarService::class)->getEvents($vehicle->traccar_device_id, $from->toIso8601String(), $to->toIso8601String());
+                    } catch (TraccarException) {
+                        continue;
+                    }
+                    foreach ($events as $event) {
                         if (($event['deviceId'] ?? null) != $vehicle->traccar_device_id || ! in_array($event['type'] ?? null, $types, true) || ! is_numeric($event['id'] ?? null) || empty($event['eventTime'])) {
                             continue;
                         }
@@ -47,6 +53,16 @@ class FleetEventNotifications
                         $row = ['user_id' => $user->id, 'event_id' => $event['id']];
                         DB::table('notification_deliveries')->insertOrIgnore($row + ['vehicle_id' => $vehicle->id, 'event_type' => $event['type'], 'occurred_at' => $when, 'status' => 'pending', 'created_at' => now(), 'updated_at' => now()]);
                         $delivery = DB::table('notification_deliveries')->where($row)->first();
+                        if ($pref->whatsapp_enabled && $delivery->whatsapp_status === null) {
+                            DB::table('notification_deliveries')->where('id', $delivery->id)->update(['whatsapp_status' => 'sending']);
+                            $wa = app(WhatsAppGateway::class)->send($pref->whatsapp_number, self::TYPES[$event['type']], $vehicle->name, $when->toIso8601String());
+                            DB::table('notification_deliveries')->where('id', $delivery->id)->update(['whatsapp_status' => $wa]);
+                        }
+                        if (! $pref->email_enabled) {
+                            DB::table('notification_deliveries')->where('id', $delivery->id)->where('status', 'pending')->update(['status' => 'disabled']);
+
+                            continue;
+                        }
                         if (! in_array($delivery->status, ['pending', 'failed'], true)) {
                             continue;
                         }

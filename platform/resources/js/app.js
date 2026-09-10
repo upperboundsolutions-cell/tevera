@@ -1,11 +1,14 @@
-import './tracking';
-import './history';
+if (document.querySelector('[data-tracking-url]')) import('./tracking');
+if (document.querySelector('[data-history-url], [data-geofence-picker]')) import('./history');
+import './operations';
+import '../css/operations.css';
 import '../css/fleet.css';
 import '../css/premium.css';
 import '../css/motion.css';
 import '../css/executive.css';
 import '../css/futuristic.css';
 import '../css/controls.css';
+import '../css/orbital.css';
 
 const progress = document.querySelector('[data-navigation-progress]');
 const actionLoader = document.querySelector('[data-action-loader]');
@@ -63,7 +66,7 @@ document.querySelectorAll('[data-theme-toggle]').forEach(button => button.addEve
 
 document.querySelectorAll('.nav-item').forEach(link => {
     const path = new URL(link.href).pathname;
-    link.classList.toggle('selected', window.location.pathname === path || window.location.pathname.startsWith(path + '/'));
+    link.classList.toggle('selected', (window.location.pathname === path && (!new URL(link.href).search || new URL(link.href).search === window.location.search)) || window.location.pathname.startsWith(path + '/'));
 });
 
 document.querySelector('.mobile-toggle')?.addEventListener('click', (event) => {

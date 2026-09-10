@@ -18,7 +18,7 @@ class BillingController extends Controller
         $payments = Payment::when(! $super, fn ($q) => $q->where('customer_id', $request->user()->customer_id))->latest()->paginate(25);
 
         return view('billing.index', ['payments' => $payments, 'plans' => Plan::where('is_active', true)->get(),
-            'customer' => $request->user()->customer, 'ready' => $gateway->ready(), 'super' => $super]);
+            'customer' => $request->user()->customer, 'ready' => $gateway->ready() || $gateway->ready('USD') || $gateway->ready('ZWG'), 'super' => $super]);
     }
 
     public function checkout(Request $request, SubscriptionBilling $billing)
@@ -57,7 +57,13 @@ class BillingController extends Controller
     public function webhook(Request $request, PaynowGateway $gateway, SubscriptionBilling $billing)
     {
         try {
-            $fields = $gateway->verified($request->getContent());
+            if (strlen($request->getContent()) > 16384) {
+                throw new \RuntimeException('Invalid message');
+            }
+            parse_str($request->getContent(), $untrusted);
+            $reference = $untrusted['reference'] ?? null;
+            $candidate = is_string($reference) ? Payment::find($reference) : null;
+            $fields = $gateway->verified($request->getContent(), $candidate?->currency);
         } catch (\Throwable $error) {
             return response('Invalid signature', 400);
         }

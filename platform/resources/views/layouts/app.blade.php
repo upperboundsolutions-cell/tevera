@@ -31,6 +31,11 @@
             <a class="nav-item" href="{{ route('dashboard') }}">@include('partials.icon', ['name' => 'overview'])<span>Overview</span></a>
             <a class="nav-item" href="{{ route('tracking') }}">@include('partials.icon', ['name' => 'map'])<span>Vehicle map</span></a>
             <div class="nav-label">FLEET MANAGEMENT</div>
+            @can('manage-fleet')
+            @foreach(['fuel'=>'Fuel & costs','maintenance'=>'Maintenance','sharing'=>'Customer tracking links','reports'=>'Reports & driver scores'] as $tab=>$label)
+            <a class="nav-item" href="{{ route('operations.index',['tab'=>$tab]) }}">@include('partials.icon', ['name'=>'vehicle'])<span>{{ $label }}</span></a>
+            @endforeach
+            @endcan
             <a class="nav-item" href="{{ route('vehicles.index') }}">@include('partials.icon', ['name' => 'vehicle'])<span>Vehicles</span></a>
             <a class="nav-item" href="{{ route('devices.index') }}">@include('partials.icon', ['name' => 'device'])<span>GPS devices</span></a>
             @can('manage-fleet')
@@ -60,7 +65,7 @@
                 <button class="mobile-toggle icon-button" type="button" aria-label="Toggle navigation" aria-controls="navigation" aria-expanded="false">@include('partials.icon', ['name' => 'menu'])</button>
                 <span class="breadcrumb">Workspace <span>/</span> <strong>@yield('title', 'Overview')</strong></span>
             </div>
-            <div class="topbar-tools">
+            <div class="topbar-tools"><label class="data-mode"><input type="checkbox" data-low-data>Low data</label>
                 <form class="global-search" action="{{ route('vehicles.index') }}" method="GET" role="search">
                     <label class="sr-only" for="global-search">Search your fleet</label>
                     <input id="global-search" name="search" placeholder="Search your fleet..." maxlength="128">

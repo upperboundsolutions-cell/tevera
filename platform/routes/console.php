@@ -3,6 +3,8 @@
 use App\Jobs\DeploymentHeartbeat;
 use App\Services\DeploymentHealth;
 use App\Services\FleetEventNotifications;
+use App\Services\MaintenanceNotifications;
+use App\Services\ScheduledFleetReports;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
@@ -41,3 +43,15 @@ Schedule::call(function () {
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+Artisan::command('fleet:reports', function () {
+    app(ScheduledFleetReports::class)->run();
+    $this->info('Scheduled reports processed.');
+});
+Schedule::command('fleet:reports')->hourly()->withoutOverlapping();
+
+Artisan::command('fleet:maintenance-alerts', function () {
+    app(MaintenanceNotifications::class)->run();
+    $this->info('Maintenance alerts processed.');
+});
+Schedule::command('fleet:maintenance-alerts')->hourly()->withoutOverlapping();

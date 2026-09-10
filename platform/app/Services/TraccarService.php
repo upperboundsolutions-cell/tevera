@@ -9,6 +9,20 @@ use Illuminate\Support\Facades\Http;
 /** Privileged transport. Use FleetTrackingService for requests originating from users. */
 class TraccarService
 {
+    public function fleetReport(string $resource, array $ids, string $from, string $to): array
+    {
+        if (! in_array($resource, ['summary', 'events'], true)) {
+            throw new \InvalidArgumentException('Unsupported report');
+        }
+        $rows = [];
+        foreach (array_chunk(array_unique(array_filter(array_map('intval', $ids), fn ($id) => $id > 0)), 100) as $chunk) {
+            $query = http_build_query(compact('from', 'to')).'&'.implode('&', array_map(fn ($id) => 'deviceId='.$id, $chunk));
+            $rows = array_merge($rows, $this->request('GET', 'reports/'.$resource, $query));
+        }
+
+        return $rows;
+    }
+
     public function getLatestPositionsForDevices(array $deviceIds): array
     {
         return $this->getByIds('positions', 'deviceId', $deviceIds);

@@ -10,12 +10,14 @@ use App\Http\Controllers\GeofenceController;
 use App\Http\Controllers\JourneyHistoryController;
 use App\Http\Controllers\MovementAnalysisController;
 use App\Http\Controllers\NotificationSettingsController;
+use App\Http\Controllers\OperationsController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ProtocolController;
 use App\Http\Controllers\ReadinessController;
 use App\Http\Controllers\TraccarConnectionController;
 use App\Http\Controllers\TrackerSetupController;
 use App\Http\Controllers\TrackingController;
+use App\Http\Controllers\TrackingShareController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\VehicleController;
 use App\Services\DeploymentHealth;
@@ -81,4 +83,20 @@ Route::middleware(['auth', 'active', 'auth.session', 'subscription'])->group(fun
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/settings/traccar/check', TraccarConnectionController::class)
         ->middleware(['can:manage-platform', 'throttle:traccar-check'])->name('traccar.check');
+});
+
+Route::get('/share/{token}', [TrackingShareController::class, 'show'])->middleware('throttle:30,1')->name('share.show');
+Route::middleware(['auth', 'active', 'auth.session', 'subscription'])->group(function () {
+    Route::get('/fleet-insights', [OperationsController::class, 'snapshot'])->middleware('throttle:12,1')->name('operations.snapshot');
+    Route::middleware('can:manage-fleet')->group(function () {
+        Route::get('/operations', [OperationsController::class, 'index'])->name('operations.index');
+        Route::post('/operations/fuel', [OperationsController::class, 'fuel'])->middleware('throttle:20,1')->name('operations.fuel');
+        Route::post('/operations/maintenance', [OperationsController::class, 'maintenance'])->middleware('throttle:20,1')->name('operations.maintenance');
+        Route::post('/operations/maintenance/{task}/complete', [OperationsController::class, 'complete'])->name('operations.complete');
+        Route::get('/operations/maintenance/{task}/document', [OperationsController::class, 'document'])->name('operations.document');
+        Route::get('/operations/report', [OperationsController::class, 'report'])->middleware('throttle:5,1')->name('operations.report');
+        Route::post('/operations/schedule', [OperationsController::class, 'schedule'])->name('operations.schedule');
+        Route::post('/operations/shares', [TrackingShareController::class, 'store'])->middleware('throttle:10,1')->name('shares.store');
+        Route::post('/operations/shares/{share}/revoke', [TrackingShareController::class, 'revoke'])->name('shares.revoke');
+    });
 });

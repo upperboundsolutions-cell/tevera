@@ -8,17 +8,25 @@ use RuntimeException;
 
 class PaynowGateway
 {
-    public function ready(): bool
+    private function setting(string $key, ?string $currency = null): mixed
+    {
+        $currency ??= config('paynow.currency');
+        $value = config('paynow.accounts.'.$currency.'.'.$key);
+
+        return $value ?: ($currency === config('paynow.currency') ? config('paynow.'.$key) : null);
+    }
+
+    public function ready(?string $currency = null): bool
     {
         $url = parse_url((string) config('paynow.public_url'));
 
-        return (bool) (config('paynow.enabled') && config('paynow.integration_id') && config('paynow.integration_key')
-            && preg_match('/^[A-Z]{3}$/', (string) config('paynow.currency')) && ($url['scheme'] ?? '') === 'https'
+        return (bool) (config('paynow.enabled') && $this->setting('integration_id', $currency) && $this->setting('integration_key', $currency)
+            && preg_match('/^[A-Z]{3}$/', (string) ($currency ?? config('paynow.currency'))) && ($url['scheme'] ?? '') === 'https'
             && str_contains($url['host'] ?? '', '.') && ! filter_var($url['host'] ?? '', FILTER_VALIDATE_IP)
             && ! isset($url['user']) && ! isset($url['query']) && ! isset($url['fragment']));
     }
 
-    public function signature(array $fields): string
+    public function signature(array $fields, ?string $currency = null): string
     {
         $values = '';
         foreach ($fields as $key => $value) {
@@ -30,12 +38,12 @@ class PaynowGateway
             }
         }
 
-        return strtoupper(hash('sha512', $values.config('paynow.integration_key')));
+        return strtoupper(hash('sha512', $values.$this->setting('integration_key', $currency)));
     }
 
-    public function verified(string $body): array
+    public function verified(string $body, ?string $currency = null): array
     {
-        if (! config('paynow.integration_key') || strlen($body) > 16384) {
+        if (! $this->setting('integration_key', $currency) || strlen($body) > 16384) {
             throw new RuntimeException('Invalid payment message.');
         }
         $fields = [];
@@ -47,7 +55,7 @@ class PaynowGateway
             }
             $fields[$key] = urldecode($parts[1]);
         }
-        if (! isset($fields['hash']) || ! hash_equals($this->signature($fields), strtoupper($fields['hash']))) {
+        if (! isset($fields['hash']) || ! hash_equals($this->signature($fields, $currency), strtoupper($fields['hash']))) {
             throw new RuntimeException('Invalid payment signature.');
         }
 
@@ -68,21 +76,22 @@ class PaynowGateway
 
     public function initiate(Payment $payment, string $email): array
     {
-        if (! $this->ready() || $payment->currency !== config('paynow.currency')) {
+        $currency = $payment->currency;
+        if (! $this->ready($currency)) {
             throw new RuntimeException('Checkout is not configured.');
         }
         $base = rtrim(config('paynow.public_url'), '/');
-        $fields = ['id' => config('paynow.integration_id'), 'reference' => $payment->id,
+        $fields = ['id' => $this->setting('integration_id', $currency), 'reference' => $payment->id,
             'amount' => number_format($payment->amount_cents / 100, 2, '.', ''),
             'additionalinfo' => 'TEVERA '.$payment->plan_name.' - 30 day subscription',
             'returnurl' => $base.'/billing/payments/'.$payment->id,
             'resulturl' => $base.'/paynow/result', 'authemail' => $email, 'status' => 'Message'];
-        $fields['hash'] = $this->signature($fields);
+        $fields['hash'] = $this->signature($fields, $currency);
         $response = Http::asForm()->timeout(25)->connectTimeout(8)->withoutRedirecting()->post('https://www.paynow.co.zw/interface/initiatetransaction', $fields);
         if (! $response->successful()) {
             throw new RuntimeException('Checkout could not be started.');
         }
-        $result = $this->verified($response->body());
+        $result = $this->verified($response->body(), $payment->currency);
         if (strtolower($result['status'] ?? '') !== 'ok') {
             throw new RuntimeException('Checkout was not accepted.');
         }
@@ -97,6 +106,6 @@ class PaynowGateway
             throw new RuntimeException('Payment status could not be verified.');
         }
 
-        return $this->verified($response->body());
+        return $this->verified($response->body(), $payment->currency);
     }
 }

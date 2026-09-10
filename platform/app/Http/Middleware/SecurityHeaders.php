@@ -12,7 +12,7 @@ class SecurityHeaders
     {
         $response = $next($request);
         $response->headers->set('X-Content-Type-Options', 'nosniff');
-        $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
+        $response->headers->set('Referrer-Policy', $request->routeIs('share.show') ? 'no-referrer' : 'strict-origin-when-cross-origin');
         $response->headers->set('X-Frame-Options', 'DENY');
         $response->headers->set('Content-Security-Policy', "default-src 'self'; style-src 'self'; style-src-attr 'unsafe-inline'; script-src 'self'; img-src 'self' data: https://tile.openstreetmap.org; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
         $response->headers->set('Cache-Control', 'no-store, private');

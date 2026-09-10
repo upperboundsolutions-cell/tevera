@@ -1,12 +1,14 @@
-# TEVERA — Vehicle Tracking & Fleet Management
+# TEVERA â€” Vehicle Tracking & Fleet Management
 
 A Laravel 12 / PHP 8.3+ foundation for a custom GPS tracking platform powered by a separate Traccar server.
 
 Latest update: vehicle/GPS registration, editing, deactivation, customer/user/driver provisioning and a protocol reference are available. See [Adding vehicles and GPS devices](docs/FLEET-MANAGEMENT.md). The Phase 1 notes below describe the original foundation.
 
-GPS devices → Traccar → privileged server-side Laravel service → authenticated Blade workspace.
+GPS devices â†’ Traccar â†’ privileged server-side Laravel service â†’ authenticated Blade workspace.
 
 Implemented: login/logout, remember me, forgot/reset password, activation checks, five roles, tenant-scoped vehicle policies, business migrations, audited account provisioning, reusable Traccar REST transport, a super-admin connection check, responsive Tailwind/Blade screens and regression tests. No default credentials are created. Traccar owns GPS processing and position history.
+
+Fleet operations now include fuel logs, maintenance, customer tracking links, driver reports, WhatsApp templates and separate USD/ZiG payment accounts. See [Fleet operations setup and limitations](docs/FLEET-OPERATIONS.md).
 
 Start with these documents:
 
@@ -38,4 +40,4 @@ Open `/login`. The provisioning command prompts for a hidden password. Follow th
 
 Verification: 28 tests / 142 assertions pass on PHP 8.3.33 with both SQLite and MariaDB. The frontend build, migration rollback/reapply, formatting, route/view caching and HTTP CSRF rejection passed. Real Traccar authentication, SMTP delivery and visual browser inspection remain unverified.
 
-Scope: this delivers Phase 1 only. Vehicle management, live maps/WebSockets, playback, geofences and reports follow in Phases 2–8. See the architecture document for the complete roadmap.
+Scope: this delivers Phase 1 only. Vehicle management, live maps/WebSockets, playback, geofences and reports follow in Phases 2â€“8. See the architecture document for the complete roadmap.

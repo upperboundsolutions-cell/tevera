@@ -9,7 +9,10 @@ if (root) {
     const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(map);
+    });
+    let lowData = false;
+    try { lowData = localStorage.getItem('tevera-low-data') === '1'; } catch {}
+    if (!lowData) tiles.addTo(map);
     let vehicles = [], page = 1, lastPage = 1, fitted = false, selected = null;
     const markers = new Map();
     const message = find('[data-map-message]');
@@ -108,9 +111,10 @@ if (root) {
     const startAuto = () => {
         clearInterval(autoTimer);
         autoTimer = setInterval(() => {
-            if (!document.hidden && find('[data-map-auto]').checked && !loading) refresh();
+            if (!lowData && !document.hidden && find('[data-map-auto]').checked && !loading) refresh();
         }, 15000);
     };
+    window.addEventListener('tevera-data-mode', event => { lowData = event.detail; if (lowData) map.removeLayer(tiles); else tiles.addTo(map); });
     startAuto();
     window.addEventListener('pagehide', () => clearInterval(autoTimer));
     window.addEventListener('pageshow', startAuto);
